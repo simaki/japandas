@@ -4,8 +4,13 @@
 from __future__ import unicode_literals
 
 import pandas as pd
-from pandas.plotting._core import PlotAccessor
 import pandas.plotting._matplotlib as _mpl
+try:
+    from pandas.plotting._core import PlotAccessor
+    has_plot_accessor = True
+except:
+    import pandas.plotting._core as plotting
+    has_plot_accessor = False
 
 from japandas.io.data import _ohlc_columns_jp, _ohlc_columns_en
 
@@ -80,7 +85,11 @@ class OhlcPlot(_mpl.LinePlot):
         return candles
 
 
-if 'ohlc' not in PlotAccessor._common_kinds:
+if has_plot_accessor and 'ohlc' not in PlotAccessor._common_kinds:
     PlotAccessor._common_kinds = (*PlotAccessor._common_kinds, 'ohlc')
-    PlotAccessor._all_kinds = PlotAccessor._common_kinds + PlotAccessor._series_kinds + PlotAccessor._dataframe_kinds
+    PlotAccessor._all_kinds = (*PlotAccessor._all_kinds, 'ohlc')
     _mpl.PLOT_CLASSES['ohlc'] = OhlcPlot
+elif 'ohlc' not in plotting._plot_klass:
+    plotting._all_kinds.append('ohlc')
+    plotting._common_kinds.append('ohlc')
+    plotting._plot_klass['ohlc'] = OhlcPlot
