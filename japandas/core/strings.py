@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 from unicodedata import normalize
 
-from pandas.compat import PY3, iteritems, u_safe
 import pandas.core.strings as strings
 
 
@@ -24,11 +23,11 @@ _SYMBOL_MAPPER = {c: normalize('NFKC', c) for c in _ZSYMBOL}
 
 
 def _reverse_dict(dict):
-    return {v: k for k, v in iteritems(dict)}
+    return {v: k for k, v in dict.items()}
 
 
 def _ord_dict(dict):
-    return {ord(k): v for k, v in iteritems(dict)}
+    return {ord(k): v for k, v in dict.items()}
 
 
 # for unicode.translate
@@ -74,19 +73,11 @@ def str_z2h(self, kana=True, alpha=True, digit=True, symbol=True):
         mapper.update(_Z2H_SYMBOL)
 
     if kana:
-        if PY3:
-            def f(x):
-                return _z2h_sm(x).translate(mapper)
-        else:
-            def f(x):
-                return _z2h_sm(u_safe(x)).translate(mapper)
+        def f(x):
+            return _z2h_sm(x).translate(mapper)
     else:
-        if PY3:
-            def f(x):
-                return x.translate(mapper)
-        else:
-            def f(x):
-                return u_safe(x).translate(mapper)
+        def f(x):
+            return x.translate(mapper)
 
     try:
         target = self.series
@@ -107,19 +98,11 @@ def str_h2z(self, kana=True, alpha=True, digit=True, symbol=True):
         mapper.update(_H2Z_SYMBOL)
 
     if kana:
-        if PY3:
-            def f(x):
-                return _h2z_sm(x).translate(mapper)
-        else:
-            def f(x):
-                return _h2z_sm(u_safe(x)).translate(mapper)
+        def f(x):
+            return _h2z_sm(x).translate(mapper)
     else:
-        if PY3:
-            def f(x):
-                return x.translate(mapper)
-        else:
-            def f(x):
-                return u_safe(x).translate(mapper)
+        def f(x):
+            return x.translate(mapper)
 
     try:
         target = self.series
