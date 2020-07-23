@@ -9,6 +9,11 @@ import os
 import pandas.compat as compat
 import pandas.tseries.holiday as holiday
 
+try:
+    from pandas.compat import cPickle as pickle
+except ImportError:
+    import pickle
+
 current_dir = os.path.dirname(__file__)
 data_path = os.path.join(current_dir, 'data', 'holidays.pkl')
 tse_data_path = os.path.join(current_dir, 'data', 'tseholidays.pkl')
@@ -17,7 +22,7 @@ tse_data_path = os.path.join(current_dir, 'data', 'tseholidays.pkl')
 def _read_rules(path):
     if os.path.exists(path):
         with open(path, mode='rb') as f:
-            rules = compat.cPickle.load(f)
+            rules = pickle.load(f)
     elif __name__ != '__main__':
         raise ImportError("Unable to load '{0}'".format(path))
     else:
@@ -62,7 +67,7 @@ if __name__ == '__main__':
             rules.append(h)
 
         with open(path, mode='wb') as w:
-            compat.cPickle.dump(rules, w, protocol=2)
+            pickle.dump(rules, w, protocol=2)
             print('pickled {0} data'.format(len(dates)))
 
     with open(os.path.join('data', 'holidays.yml'), mode='rb') as f:
