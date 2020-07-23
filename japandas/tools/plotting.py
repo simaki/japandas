@@ -62,7 +62,10 @@ class OhlcPlot(LinePlot):
         return _plot
 
     def _make_plot(self):
-        from pandas.plotting._matplotlib.timeseries import _decorate_axes, format_dateaxis
+        try:
+            from pandas.plotting._matplotlib.timeseries import _decorate_axes, format_dateaxis
+        except ImportError:
+            from pandas.plotting._timeseries import _decorate_axes, format_dateaxis
         plotf = self._get_plot_function()
         ax = self._get_ax(0)
 
