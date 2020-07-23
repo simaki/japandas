@@ -14,8 +14,8 @@ try:
     from pandas.plotting._core import PlotAccessor as accessor
     from pandas.plotting._matplotlib import PLOT_CLASSES as plot_classes
 except ImportError:
-    from pandas.plotting._core import plotting as accessor
-    from pandas.plotting._core.plotting import _plot_klass as plot_classes
+    import pandas.plotting._core as accessor
+    from pandas.plotting._core import _plot_klass as plot_classes
 
 from japandas.io.data import _ohlc_columns_jp, _ohlc_columns_en
 
