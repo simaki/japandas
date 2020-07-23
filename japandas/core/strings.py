@@ -62,6 +62,9 @@ def _z2h_sm(text):
 
 
 def str_z2h(self, kana=True, alpha=True, digit=True, symbol=True):
+    """
+    self : StringMethods
+    """
     mapper = dict()
     if kana:
         mapper.update(_Z2H_KANA)
@@ -79,10 +82,7 @@ def str_z2h(self, kana=True, alpha=True, digit=True, symbol=True):
         def f(x):
             return x.translate(mapper)
 
-    try:
-        target = self.series
-    except AttributeError:
-        target = self._data
+    target = self._orig
     return self._wrap_result(strings._na_map(f, target))
 
 
@@ -104,10 +104,7 @@ def str_h2z(self, kana=True, alpha=True, digit=True, symbol=True):
         def f(x):
             return x.translate(mapper)
 
-    try:
-        target = self.series
-    except AttributeError:
-        target = self._data
+    target = self._orig
     return self._wrap_result(strings._na_map(f, target))
 
 
