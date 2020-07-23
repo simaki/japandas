@@ -4,15 +4,13 @@
 from __future__ import unicode_literals
 
 import pandas as pd
-try:
-    import pandas.plotting._core as plotting
-except ImportError:
-    import pandas.tools.plotting as plotting
+from pandas.plotting._core import PlotAccessor
+import pandas.plotting._matplotlib as _mpl
 
 from japandas.io.data import _ohlc_columns_jp, _ohlc_columns_en
 
 
-class OhlcPlot(plotting.LinePlot):
+class OhlcPlot(_mpl.LinePlot):
     ohlc_cols = pd.Index(['open', 'high', 'low', 'close'])
     reader_cols_en = pd.Index(_ohlc_columns_en)
     reader_cols_jp = pd.Index(_ohlc_columns_jp)
@@ -36,11 +34,11 @@ class OhlcPlot(plotting.LinePlot):
 
             raise ValueError('data is not ohlc-like:')
         data = data[['Open', 'Close', 'High', 'Low']]
-        plotting.LinePlot.__init__(self, data, **kwargs)
+        _mpl.LinePlot.__init__(self, data, **kwargs)
 
     def _get_plot_function(self):
         try:
-            from mpl_finance import candlestick_ohlc
+            from mplfinance.original_flavor import candlestick_ohlc
         except ImportError as e:
             try:
                 from matplotlib.finance import candlestick_ohlc
@@ -54,11 +52,7 @@ class OhlcPlot(plotting.LinePlot):
         return _plot
 
     def _make_plot(self):
-        try:
-            from pandas.plotting._timeseries import (_decorate_axes,
-                                                     format_dateaxis)
-        except ImportError:
-            from pandas.tseries.plotting import _decorate_axes, format_dateaxis
+        from pandas.plotting._matplotlib.timeseries import _decorate_axes, format_dateaxis
         plotf = self._get_plot_function()
         ax = self._get_ax(0)
 
@@ -86,7 +80,11 @@ class OhlcPlot(plotting.LinePlot):
         return candles
 
 
-if 'ohlc' not in plotting._plot_klass:
-    plotting._all_kinds.append('ohlc')
-    plotting._common_kinds.append('ohlc')
-    plotting._plot_klass['ohlc'] = OhlcPlot
+if 'ohlc' not in PlotAccessor._common_kinds:
+    PlotAccessor._common_kinds = (*PlotAccessor._common_kinds, 'ohlc')
+    PlotAccessor._all_kinds = (
+        PlotAccessor._common_kinds
+        + PlotAccessor._series_kinds
+        + PlotAccessor._dataframe_kinds
+    )
+    _mpl.PLOT_CLASSES['ohlc'] = OhlcPlot
