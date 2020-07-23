@@ -100,7 +100,7 @@ class TestEstat(unittest.TestCase):
             '全国都道府県030001': ['全国', '全国市部', '全国郡部', '北海道', '青森県'],
             'value': [117060396, 89187409, 27872987, 5575989, 1523907],
         }, index=pd.DatetimeIndex(['1980-01-01'] * 5, name='時間軸(年次)'))
-        tm.assert_frame_equal(df.head(), exp)
+        tm.assert_frame_equal(df.head(), exp, check_like=True)
 
         df = jpd.DataReader(['0000030001', '0000030002'], 'estat', appid=ESTAT_KEY)
         self.assertIsInstance(df, pd.DataFrame)
@@ -112,7 +112,7 @@ class TestEstat(unittest.TestCase):
             '全国・都道府県・大都市': ['全国'] * 5,
             'value': [445007, 194243, 199623, 203464, 190711],
         }, index=pd.DatetimeIndex(['2009-03-01', '2009-02-01', '2009-01-01', '2008-12-01', '2008-11-01'], name='時間軸（月次）'))
-        tm.assert_frame_equal(df.head(), exp)
+        tm.assert_frame_equal(df.head(), exp, check_like=True)
 
     def test_data_estat_data_numeric(self):
         ESTAT_KEY = os.environ['ESTAT']
