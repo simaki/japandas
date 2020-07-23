@@ -8,7 +8,7 @@ import unittest
 import pandas as pd
 try:
     import pandas.testing as tm
-except:
+except ImportError:
     import pandas.util.testing as tm
 
 import japandas as jpd
