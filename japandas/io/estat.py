@@ -67,7 +67,7 @@ class EStatReader(_BaseReader):
 
     def read(self):
         """ read data """
-        if isinstance(self.symbols, pd.compat.string_types):
+        if isinstance(self.symbols, str):
             if len(self.symbols) == 8:
                 return self.get_estat_list()
 
