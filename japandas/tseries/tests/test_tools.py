@@ -6,7 +6,10 @@ from __future__ import unicode_literals
 import unittest
 
 import pandas as pd
-import pandas.util.testing as tm
+try:
+    import pandas.testing as tm
+except:
+    import pandas.util.testing as tm
 
 import japandas as jpd
 

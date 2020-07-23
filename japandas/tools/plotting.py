@@ -17,6 +17,12 @@ except ImportError:
     import pandas.plotting._core as accessor
     from pandas.plotting._core import _plot_klass as plot_classes
 
+try:
+    from mplfinance.original_flavor import candlestick_ohlc
+except ImportError:
+    from mpl_finance import candlestick_ohlc
+
+
 from japandas.io.data import _ohlc_columns_jp, _ohlc_columns_en
 
 
@@ -47,14 +53,6 @@ class OhlcPlot(LinePlot):
         LinePlot.__init__(self, data, **kwargs)
 
     def _get_plot_function(self):
-        try:
-            from mplfinance.original_flavor import candlestick_ohlc
-        except ImportError as e:
-            try:
-                from matplotlib.finance import candlestick_ohlc
-            except ImportError:
-                raise ImportError(e)
-
         def _plot(data, ax, **kwds):
             candles = candlestick_ohlc(ax, data.values, **kwds)
             return candles
