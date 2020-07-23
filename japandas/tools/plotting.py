@@ -82,9 +82,5 @@ class OhlcPlot(_mpl.LinePlot):
 
 if 'ohlc' not in PlotAccessor._common_kinds:
     PlotAccessor._common_kinds = (*PlotAccessor._common_kinds, 'ohlc')
-    PlotAccessor._all_kinds = (
-        PlotAccessor._common_kinds
-        + PlotAccessor._series_kinds
-        + PlotAccessor._dataframe_kinds
-    )
+    PlotAccessor._all_kinds = PlotAccessor._common_kinds + PlotAccessor._series_kinds + PlotAccessor._dataframe_kinds
     _mpl.PLOT_CLASSES['ohlc'] = OhlcPlot
