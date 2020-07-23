@@ -8,7 +8,7 @@ import pandas as pd
 try:
     from pandas.plotting._matplotlib import LinePlot
 except ImportError:
-    from pantas.tools.plotting import LinePlot
+    from pandas.tools.plotting import LinePlot
 
 try:
     from pandas.plotting._core import PlotAccessor as accessor
